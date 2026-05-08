@@ -1,0 +1,46 @@
+{
+  "name": "@aganitha/author-cli",
+  "version": "1.1.0",
+  "description": "CLI to explore authors and generate book summaries using LLM",
+  "type": "module",
+  "bin": {
+    "author-cli": "./dist/cli/summarize.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "bun src/cli/summarize.ts",
+    "build": "rm -rf dist && tsc",
+    "start": "node dist/cli/summarize.js",
+    "postbuild": "chmod +x dist/cli/summarize.js",
+  "compile:linux-x64": "bun build src/cli/summarize.ts --compile --target=bun-linux-x64 --outfile=bin/author-cli-linux-x64",
+  "compile:linux-arm64": "bun build src/cli/summarize.ts --compile --target=bun-linux-arm64 --outfile=bin/author-cli-linux-arm64",
+  "compile:macos-arm64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-arm64 --outfile=bin/author-cli-macos-arm64",
+  "compile:macos-x64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-x64 --outfile=bin/author-cli-macos-x64",
+  "compile:windows": "bun build src/cli/summarize.ts --compile --target=bun-windows-x64 --outfile=bin/author-cli.exe"
+  },
+  "keywords": [
+    "cli",
+    "books",
+    "llm",
+    "ai",
+    "author",
+    "summary"
+  ],
+  "author": "Harleen Kaur",
+  "license": "ISC",
+  "dependencies": {
+    "@ai-sdk/google": "^3.0.65",
+    "ai": "^6.0.169",
+    "commander": "^14.0.3",
+    "conf": "^15.1.0",
+    "dotenv": "^17.4.2",
+    "inquirer": "^13.4.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  }
+}

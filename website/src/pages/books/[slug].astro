@@ -1,0 +1,250 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+import { slugify } from "../../lib/slugify";
+import { getOpenLibraryCover } from "../../lib/bookCover";
+import ExportButtons from "../../components/ExportButtons.astro";
+
+export async function getStaticPaths() {
+  const books = await getCollection("books");
+
+  return books.map((book) => ({
+    params: {
+      slug: book.id.replace(/\.md$/, ""),
+    },
+    props: { book },
+  }));
+}
+
+const { book } = Astro.props;
+
+const genres: string[] = book.data.genres ?? [];
+const themes: string[] = book.data.themes ?? [];
+const relatedBooks: string[] = book.data.relatedBooks ?? [];
+
+// Resolve related books + covers
+const relatedBooksWithCovers = await Promise.all(
+  relatedBooks.map(async (rb: string) => {
+    const [title, author] = rb.split(" by ");
+
+    const slug = slugify(title);
+
+    const cover = await getOpenLibraryCover(title, author);
+
+    return {
+      title,
+      author,
+      slug,
+      cover,
+    };
+  }),
+);
+---
+
+<Layout>
+  <div class="book-hero">
+    {
+      genres.length > 0 && (
+        <div class="book-genre-row">
+          {genres.map((g) => (
+            <span class="book-genre">{g}</span>
+          ))}
+        </div>
+      )
+    }
+
+    <h1 class="book-title">
+      {book.data.title}
+    </h1>
+
+    <div class="book-author-row">
+      <span class="book-author-label"> By </span>
+
+      <span class="book-author-name">
+        {book.data.author}
+      </span>
+    </div>
+  </div>
+
+  <span class="book-ornament"> &#10022; &nbsp; &#10022; &nbsp; &#10022; </span>
+
+  <div class="book-layout">
+    <main>
+      <article class="book-content">
+        <Fragment set:html={book.rendered?.html} />
+        {
+          themes.length > 0 && (
+            <>
+              <span class="book-sidebar-label">Themes</span>
+              <div class="book-themes">
+                {themes.map((t) => (
+                  <span class="book-theme">{t}</span>
+                ))}
+              </div>
+            </>
+          )
+        }
+      </article>
+    </main>
+
+    <aside>
+      {
+        relatedBooksWithCovers.length > 0 && (
+          <>
+            <span class="book-sidebar-label">Related Reading</span>
+
+            <div class="book-related-list">
+              {relatedBooksWithCovers.map((rb) => (
+                <a href={`/books/${rb.slug}`} class="book-related-card">
+                  <img
+                    src={rb.cover ?? "/fallback-book.png"}
+                    alt={rb.title}
+                    class="book-related-cover"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.src='/fallback-book.png';"
+                  />
+
+                  <div class="book-related">
+                    {rb.title}
+
+                    {rb.author && <strong>{rb.author}</strong>}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </>
+        )
+      }
+
+      <div class="export-buttons">
+  <span class="book-sidebar-label">Download As</span>
+
+  <button class="export-btn" onclick="download('docx')">
+    <span class="export-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+    </span>
+    <span class="export-label">Word Document</span>
+    <span class="export-ext">.docx</span>
+  </button>
+
+  <button class="export-btn" onclick="download('pdf')">
+    <span class="export-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="9" y1="13" x2="15" y2="13"/>
+        <line x1="9" y1="17" x2="15" y2="17"/>
+      </svg>
+    </span>
+    <span class="export-label">PDF</span>
+    <span class="export-ext">.pdf</span>
+  </button>
+
+  <button class="export-btn export-btn--gold" onclick="download('pptx')">
+    <span class="export-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    </span>
+    <span class="export-label">Presentation</span>
+    <span class="export-ext">.pptx</span>
+  </button>
+</div>
+    </aside>
+  </div>
+  <style>
+  .export-buttons {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #2e5233;
+  }
+
+  .export-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid #2e5233;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: #b8b3a0;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .export-btn:hover {
+    border-color: #c9a84c;
+    color: #f0ece0;
+  }
+
+  .export-btn:hover .export-icon {
+    color: #c9a84c;
+  }
+
+  .export-btn--gold {
+    border-color: #3a5a30;
+    background: #2a4e30;
+  }
+
+  .export-btn--gold:hover {
+    background: #2e5233;
+  }
+
+  .export-icon {
+    color: #4a6a4c;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .export-label {
+    flex: 1;
+    text-align: left;
+  }
+
+  .export-ext {
+    color: #4a6a4c;
+    font-size: 9px;
+    letter-spacing: .1em;
+  }
+</style>
+
+<script is:inline>
+  window.download = function (format) {
+    console.log("DOWNLOAD FUNCTION CALLED");
+
+    const pathParts = window.location.pathname
+      .split("/")
+      .filter(Boolean);
+
+    const slug = pathParts[pathParts.length - 1];
+
+    console.log("DOWNLOAD CLICK:", { slug, format });
+
+    if (!slug || !format) {
+      console.error("Missing slug or format");
+      return;
+    }
+
+    const url = `/api/export?slug=${encodeURIComponent(
+      slug
+    )}&format=${encodeURIComponent(format)}`;
+
+    console.log("FINAL URL:", url);
+
+    window.location.href = url;
+  };
+</script>
+</Layout>

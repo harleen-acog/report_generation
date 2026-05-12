@@ -4,9 +4,12 @@ import "dotenv/config";
 import { Command } from "commander";
 import inquirer from "inquirer";
 import { getApiKey, setApiKey, clearApiKey } from "../config/store.js";
-
+import { getBookInfoDetail } from "../services/bookinfo_service.js";
+import { generateMarkdownFile } from "../services/markdown_service.js";
 import { getAuthorOverview } from "../services/author_service.js";
 import { getBookSummary } from "../services/book_summary_service.js";
+import { exportSlides } from "../export/exportSlides.js";
+import { exportDocx } from "../export/docxExporter.js";
 
 const program = new Command();
 
@@ -110,13 +113,13 @@ program
 program
   .command("summary")
   .description(
-    `Generate summary for any book, by giving the title, author (if known) and summary style\nExample usage: author-cli summary --title "Harry Potter" --style "poem" --depth "short" --author "J.K. Rowling"` ,
+    `Generate summary for any book, by giving the title, author (if known) and summary style\nExample usage: author-cli summary --title "Harry Potter" --style "poem" --depth "short" --author "J.K. Rowling"`,
   )
   .option("--title <title>", "Book title")
   .option("--author <author>", "Author name")
   .option(
     "--depth <depth>",
-  `Summary depth:
+    `Summary depth:
 short → concise overview (~80 words)
 medium → balanced summary (~150 words)
 detailed → rich thematic summary (~300-400 words)
@@ -144,6 +147,108 @@ academic → analytical and literary tone with deeper interpretation`,
     console.log("\nSummary:\n");
     console.log(result);
   });
+
+program
+  .command("generate")
+  .description("Generate rich book content in different formats")
+
+  .requiredOption("--title <title>", "Book title")
+
+  .option("--author <author>", "Author name", "Unknown")
+
+  .option("--style <style>", "Generation style", "literary")
+
+  .option(
+    "--depth <depth>",
+    `Content depth
+
+short → concise overview
+medium → balanced summary
+detailed → rich literary summary
+academic → analytical interpretation`,
+    "medium",
+  )
+
+  .option("--format <format>", "Output format", "markdown")
+
+  .option("--export <path>", "Optional export directory")
+
+  .action(async (options) => {
+    const result = await getBookInfoDetail({
+      title: options.title,
+      author: options.author,
+      style: options.style,
+      depth: options.depth,
+    });
+
+    switch (options.format) {
+      case "markdown": {
+        const filePath = generateMarkdownFile(result, options.export);
+
+        console.log(`\nMarkdown generated successfully:\n${filePath}`);
+
+        if (options.export) {
+          console.log(`\nExported copy saved to:\n${options.export}`);
+        }
+
+        break;
+      }
+
+      default:
+        console.log(`Unsupported format: ${options.format}`);
+    }
+  });
+
+
+// --------------------------------------------------
+// EXPORT
+// --------------------------------------------------
+
+program
+  .command("export")
+  .description(
+    "Export generated book into pptx/pdf/html"
+  )
+
+  .requiredOption(
+    "--title <title>",
+    "Book title"
+  )
+
+  .requiredOption(
+    "--format <format>",
+    "pptx/pdf/html"
+  )
+
+  .option(
+    "--output <path>",
+    "Custom output directory"
+  )
+
+  .action(async (options) => {
+  if (options.format === "docx") {
+  await exportDocx({
+    title: options.title,
+    output: options.output,
+  });
+  return;
+}
+
+  if (
+  options.format === "pptx" || 
+  options.format === "pdf" ||
+  options.format === "html"
+) {
+  await exportSlides({
+    title: options.title,
+    format: options.format,
+    output: options.output,
+  });
+  return;
+}
+});
+
+
 
 // Run program
 program.parse();

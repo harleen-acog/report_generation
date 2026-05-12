@@ -1,0 +1,198 @@
+/* @theme book-theme */
+@import 'default';
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@300;400&display=swap');
+
+/* ── Base slide ── */
+section {
+  font-family: 'EB Garamond', Georgia, serif;
+  background: #1e3a23;
+  color: #b8b3a0;
+  padding: 60px 72px;
+  position: relative;
+}
+
+/* gold hairline at bottom of every slide */
+section::after {
+  content: '';
+  position: absolute;
+  bottom: 48px;
+  left: 72px;
+  right: 72px;
+  height: 1px;
+  /* background: #c9a84c; */
+  opacity: 0.4;
+}
+
+/* ── Headings ── */
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #f0ece0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+h2 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #7aaa7e;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #2e5233;
+  padding-bottom: 10px;
+}
+
+h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #f0ece0;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Paragraphs ── */
+p {
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: #b8b3a0;
+  margin-bottom: 1rem;
+}
+
+/* ── Lists ── */
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+li {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #b8b3a0;
+  padding: 10px 0;
+  border-bottom: 1px solid #2a4a30;
+  display: flex;
+  gap: 14px;
+}
+
+li::before {
+  content: '—';
+  color: #c9a84c;
+  flex-shrink: 0;
+}
+
+/* ── Blockquote ── */
+blockquote {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.9rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: #c4bfaa;
+  border-left: 3px solid #c9a84c;
+  padding-left: 28px;
+  margin-top: 2rem;
+}
+
+/* ── Strong / em ── */
+strong {
+  color: #f0ece0;
+  font-weight: 600;
+}
+
+em {
+  color: #c9a84c;
+  font-style: italic;
+}
+
+/* ── Footer / pagination ── */
+footer {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f1f1f1;
+}
+
+/* ── Title slide (first slide) ── */
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+section.title h1 {
+  font-size: 3.8rem;
+  margin-bottom: 1rem;
+}
+
+section.title h1::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: #c9a84c;
+  margin-top: 20px;
+}
+
+section.title p {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #7aaa7e;
+  margin-top: 0.5rem;
+}
+
+/* ── Quote slide ── */
+section.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+section.quote blockquote {
+  font-size: 2.2rem;
+  border-left: none;
+  padding-left: 0;
+  text-align: center;
+  color: #f0ece0;
+}
+
+section.quote blockquote::before {
+  content: '\201C';
+  display: block;
+  font-size: 5rem;
+  color: #c9a84c;
+  line-height: 1;
+  margin-bottom: -1rem;
+  opacity: 0.6;
+}
+
+/* ── Code blocks (if any) ── */
+code {
+  font-size: 0.9rem;
+  background: #2a4e30;
+  color: #c9a84c;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+pre {
+  background: #162e1a;
+  border-left: 3px solid #2e5233;
+  padding: 20px 24px;
+  border-radius: 0;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  color: #b8b3a0;
+}

@@ -14,11 +14,15 @@
     "build": "rm -rf dist && tsc",
     "start": "node dist/cli/summarize.js",
     "postbuild": "chmod +x dist/cli/summarize.js",
-  "compile:linux-x64": "bun build src/cli/summarize.ts --compile --target=bun-linux-x64 --outfile=bin/author-cli-linux-x64",
-  "compile:linux-arm64": "bun build src/cli/summarize.ts --compile --target=bun-linux-arm64 --outfile=bin/author-cli-linux-arm64",
-  "compile:macos-arm64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-arm64 --outfile=bin/author-cli-macos-arm64",
-  "compile:macos-x64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-x64 --outfile=bin/author-cli-macos-x64",
-  "compile:windows": "bun build src/cli/summarize.ts --compile --target=bun-windows-x64 --outfile=bin/author-cli.exe"
+    "compile:linux-x64": "bun build src/cli/summarize.ts --compile --target=bun-linux-x64 --outfile=bin/author-cli-linux-x64",
+    "compile:linux-arm64": "bun build src/cli/summarize.ts --compile --target=bun-linux-arm64 --outfile=bin/author-cli-linux-arm64",
+    "compile:macos-arm64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-arm64 --outfile=bin/author-cli-macos-arm64",
+    "compile:macos-x64": "bun build src/cli/summarize.ts --compile --target=bun-darwin-x64 --outfile=bin/author-cli-macos-x64",
+    "compile:windows": "bun build src/cli/summarize.ts --compile --target=bun-windows-x64 --outfile=bin/author-cli.exe",
+    "slides:build": "bun src/export/exportSlides.ts",
+    "slides:ppt": "marp generated/slides/*.md --pptx --theme-set src/themes/book-theme.css && mv generated/slides/*.pptx generated/ppt/",
+    "slides:pdf": "marp generated/slides/*.md --pdf --theme-set src/themes/book-theme.css && mv generated/slides/*.pdf generated/pdf/",
+    "slides:html": "marp generated/slides/*.md --html --theme-set src/themes/book-theme.css && mv generated/slides/*.html generated/html/"
   },
   "keywords": [
     "cli",
@@ -32,14 +36,23 @@
   "license": "ISC",
   "dependencies": {
     "@ai-sdk/google": "^3.0.65",
+    "@marp-team/marp-cli": "^4.4.0",
     "ai": "^6.0.169",
     "commander": "^14.0.3",
     "conf": "^15.1.0",
+    "docx": "^9.6.1",
     "dotenv": "^17.4.2",
+    "gray-matter": "^4.0.3",
     "inquirer": "^13.4.2",
+    "markdown-it": "^14.1.1",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^25.6.0",
     "typescript": "^6.0.3"
   }

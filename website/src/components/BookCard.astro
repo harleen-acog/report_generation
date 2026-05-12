@@ -1,0 +1,131 @@
+---
+const { book, slug } = Astro.props;
+---
+
+  <a href={`/books/${book.id.replace(/\.md$/, "")}`}
+  class="book-card"
+>
+  <h2 class="book-card-title">
+    {book.data.title}
+  </h2>
+  <p class="book-card-author">
+    by {book.data.author}
+  </p>
+  {book.data.summary && (
+    <p class="book-card-summary">
+      {book.data.summary}
+    </p>
+  )}
+  <div class="book-card-genres">
+    {book.data.genres?.map((g) => (
+      <span class="book-card-genre">{g}</span>
+    ))}
+  </div>
+</a>
+
+<style>
+.book-card {
+  display: block;
+  border: 1px solid #3a6040;
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.2s ease;
+  
+}
+
+.book-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(42, 78, 48, 0.5) 0%, rgba(17, 37, 21, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.book-card:hover {
+  border-color: #c9a84c;
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 6px #1e3121
+}
+
+.book-card:hover::before {
+  opacity: 1;
+}
+
+/* gold left accent on hover */
+.book-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #c9a84c;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s ease;
+}
+
+.book-card:hover::after {
+  transform: scaleY(1);
+}
+
+.book-card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: #f0ece0;
+  line-height: 1.2;
+  position: relative;
+}
+
+.book-card-author {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #7aaa7e;
+  margin-top: 6px;
+  position: relative;
+}
+
+.book-card-summary {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #b8b3a0;
+  margin-top: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+}
+
+.book-card-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.book-card-genre {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  border: 1px solid #3a6040;
+  padding: 3px 10px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.book-card:hover .book-card-genre {
+  border-color: #c9a84c;
+}
+</style>

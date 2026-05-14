@@ -1,0 +1,127 @@
+{
+  "section": "book_overview",
+  "title": "Book Overview",
+  "group": 1,
+  "mode": "hybrid",
+  "slide_budget": 4,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": false
+  },
+
+  "structured_fields": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Full title of the book",
+      "example": "Atomic Habits"
+    },
+    {
+      "name": "author",
+      "type": "string",
+      "required": true,
+      "description": "Full name of the author",
+      "example": "James Clear"
+    },
+    {
+      "name": "first_publish_year",
+      "type": "number",
+      "required": false,
+      "description": "Year the book was first published",
+      "example": 2018
+    },
+    {
+      "name": "genres",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Broad literary or non-fiction genres this book belongs to",
+      "example": ["Self-help", "Psychology", "Productivity"]
+    },
+    {
+      "name": "themes",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Core thematic ideas explored in the book — short phrases, not sentences",
+      "example": ["habit formation", "compound growth", "identity-based change", "behavioural psychology"]
+    },
+    {
+      "name": "key_points",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Concise bullet-style insights capturing the most important ideas or arguments in the book. Each as a standalone sentence.",
+      "example": [
+        "Small 1% improvements compound into remarkable results over time",
+        "Habits are driven by cue, craving, response and reward",
+        "Identity-based habits are more durable than outcome-based ones"
+      ]
+    },
+    {
+      "name": "related_books",
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Real books with similar themes or complementary ideas. Format: 'Title by Author'",
+      "example": [
+        "The Power of Habit by Charles Duhigg",
+        "Deep Work by Cal Newport",
+        "Thinking, Fast and Slow by Daniel Kahneman"
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "summary",
+      "required": true,
+      "description": "A well-crafted summary of the book — its central argument, narrative arc, and what makes it significant. Use multiple concise paragraphs with blank lines between them. Respect the requested depth and style.",
+      "min_words": 80,
+      "max_words": 400
+    },
+    {
+      "name": "why_it_matters",
+      "required": false,
+      "description": "A short paragraph on why this book is relevant today — its cultural, intellectual or practical significance",
+      "min_words": 40,
+      "max_words": 100
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": ["title", "author", "genres", "themes", "key_points", "summary"],
+    "min_array_length": {
+      "genres": 1,
+      "themes": 3,
+      "key_points": 3
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "literary and insightful — written for an intellectually curious reader",
+    "avoid": [
+      "plot spoilers for fiction without warning",
+      "inventing quotes or attributing false claims to the author",
+      "generic summaries that could apply to any book in the genre",
+      "listing more than 8 key points"
+    ],
+    "prefer": [
+      "capturing the author's specific voice and argument",
+      "themes as short evocative phrases not full sentences",
+      "related books that genuinely complement this one",
+      "summary tone that subtly reflects the requested style"
+    ]
+  }
+}

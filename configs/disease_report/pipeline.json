@@ -1,0 +1,142 @@
+{
+  "section": "pipeline",
+  "title": "Pipeline & Emerging Therapies",
+  "group": 2,
+  "mode": "hybrid",
+  "slide_budget": 3,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["investigational_drugs", "phase_distribution"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "investigational_drugs",
+      "type": "array",
+      "required": true,
+      "description": "Investigational drugs currently in clinical trials — each with key trial properties",
+      "items": {
+        "type": "object",
+        "properties": {
+          "drug": "string",
+          "phase": "number",
+          "company": "string",
+          "modality": "string",
+          "status": "string",
+          "indication": "string"
+        }
+      },
+      "example": [
+        {
+          "drug": "Anifrolumab",
+          "phase": 3,
+          "company": "AstraZeneca",
+          "modality": "Biologic — type I interferon receptor antagonist",
+          "status": "Approved — included for pipeline context",
+          "indication": "Moderate to severe SLE"
+        },
+        {
+          "drug": "Deucravacitinib",
+          "phase": 3,
+          "company": "Bristol Myers Squibb",
+          "modality": "Small molecule — TYK2 inhibitor",
+          "status": "Active recruiting",
+          "indication": "SLE with skin and joint involvement"
+        }
+      ]
+    },
+    {
+      "name": "phase_distribution",
+      "type": "array",
+      "required": true,
+      "description": "Count of investigational drugs per clinical trial phase — used for bar chart rendering",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase": "string",
+          "count": "number"
+        }
+      },
+      "example": [
+        { "phase": "Phase 1", "count": 4 },
+        { "phase": "Phase 2", "count": 7 },
+        { "phase": "Phase 3", "count": 3 }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "novel_modalities_narrative",
+      "required": true,
+      "description": "Narrative covering emerging therapeutic modalities in the pipeline — gene therapy, CAR-T, biologics, small molecules, RNA-based therapies. Explain what makes each approach novel and what clinical problem it addresses.",
+      "min_words": 100,
+      "max_words": 200
+    },
+    {
+      "name": "companies_partnerships_narrative",
+      "required": false,
+      "description": "Narrative on key companies driving the pipeline and notable partnerships, licensing deals or collaborations shaping the competitive landscape",
+      "min_words": 60,
+      "max_words": 130
+    },
+    {
+      "name": "clinical_trial_landscape_narrative",
+      "required": false,
+      "description": "Narrative on the overall clinical trial landscape — trial design trends, patient recruitment challenges, endpoints being used and regulatory considerations",
+      "min_words": 60,
+      "max_words": 130
+    }
+  ],
+
+  "charts": [
+    {
+      "id": "phase_distribution_chart",
+      "type": "bar",
+      "source_field": "phase_distribution",
+      "x": "phase",
+      "y": "count",
+      "title": "Pipeline Distribution by Clinical Phase",
+      "caption": "Number of investigational drugs per clinical trial phase"
+    }
+  ],
+
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": [
+      "investigational_drugs",
+      "phase_distribution",
+      "novel_modalities_narrative"
+    ],
+    "min_array_length": {
+      "investigational_drugs": 3,
+      "phase_distribution": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "forward-looking and analytically grounded — balance optimism with clinical realism",
+    "avoid": [
+      "listing drugs without clinical or mechanistic context",
+      "overstating pipeline maturity without phase evidence",
+      "inventing trial data — if uncertain mark status as unconfirmed",
+      "ignoring failed or discontinued trials where relevant"
+    ],
+    "prefer": [
+      "connecting investigational mechanisms to unmet needs already established",
+      "noting where pipeline drugs represent genuine mechanistic innovation",
+      "acknowledging competitive dynamics between companies where relevant",
+      "phase distribution counts that are consistent with the drug list provided"
+    ]
+  }
+}

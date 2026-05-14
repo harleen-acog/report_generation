@@ -1,0 +1,75 @@
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate market and access landscape data for the disease below.
+This section covers market size, regulatory status, reimbursement
+and competitive dynamics for a professional pharma report.
+
+DISEASE: {{ disease.name }}
+{% if disease.description %}
+DESCRIPTION: {{ disease.description }}
+{% endif %}
+
+{% if context %}
+─────────────────────────────────────
+CONTEXT FROM PREVIOUS SECTIONS:
+{{ context }}
+─────────────────────────────────────
+Ensure market narrative is consistent with the treatment
+landscape and pipeline already established.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURED FIELDS
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type       : {{ field.type }}
+  Task       : {{ field.description }}
+  {% if field.example %}
+  Example    : {{ field.example | dump }}
+  {% endif %}
+  {% if field.required %}⚠ Required{% else %}Optional — omit if no reliable data{% endif %}
+
+{% endfor %}
+
+NARRATIVE FIELDS
+Write in clear prose. Respect word limits strictly.
+
+{% for field in section.freetext_fields %}
+"{{ field.name }}"
+  Task       : {{ field.description }}
+  Word limit : {{ field.min_words }}–{{ field.max_words }} words
+  {% if field.required %}⚠ Required{% else %}Optional{% endif %}
+
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

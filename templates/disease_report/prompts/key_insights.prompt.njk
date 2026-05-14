@@ -1,0 +1,77 @@
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate key insights and future outlook for the disease below.
+This is the final and most important section of a professional
+pharma report — it synthesises everything established across
+all previous sections into strategic conclusions.
+
+DISEASE: {{ disease.name }}
+{% if disease.description %}
+DESCRIPTION: {{ disease.description }}
+{% endif %}
+
+{% if context %}
+─────────────────────────────────────
+FULL REPORT CONTEXT:
+{{ context }}
+─────────────────────────────────────
+This context summarises all previous sections of the report.
+Your insights must be grounded in and consistent with this
+context. Do not introduce facts that contradict it.
+Synthesise across sections — do not summarise one section alone.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURED FIELDS
+Each array item should be a concise, punchy, standalone string.
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type       : {{ field.type }}
+  Task       : {{ field.description }}
+  {% if field.example %}
+  Example    : {{ field.example | dump }}
+  {% endif %}
+  ⚠ Required — minimum {{ section.validation.min_array_length[field.name] }} items
+
+{% endfor %}
+
+NARRATIVE FIELDS
+
+{% for field in section.freetext_fields %}
+"{{ field.name }}"
+  Task       : {{ field.description }}
+  Word limit : {{ field.min_words }}–{{ field.max_words }} words
+  ⚠ Required
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

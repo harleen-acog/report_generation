@@ -1,0 +1,87 @@
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate pathophysiology content for the disease below.
+This section explains the biological mechanisms behind the disease
+for a professional pharma report — scientific rigour and clinical
+relevance are both important.
+
+DISEASE: {{ disease.name }}
+{% if disease.description %}
+DESCRIPTION: {{ disease.description }}
+{% endif %}
+
+{% if context %}
+─────────────────────────────────────
+CONTEXT FROM PREVIOUS SECTIONS:
+{{ context }}
+─────────────────────────────────────
+Ensure mechanisms are consistent with the disease
+profile and risk factors already established.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURED FIELDS
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type       : {{ field.type }}
+  Task       : {{ field.description }}
+  {% if field.example %}
+  Example    : {{ field.example | dump }}
+  {% endif %}
+  {% if field.required %}⚠ Required{% else %}Optional — omit if no reliable data{% endif %}
+
+{% endfor %}
+
+NARRATIVE FIELDS
+Write in flowing prose. Respect word limits strictly.
+
+{% for field in section.freetext_fields %}
+"{{ field.name }}"
+  Task       : {{ field.description }}
+  Word limit : {{ field.min_words }}–{{ field.max_words }} words
+  {% if field.required %}⚠ Required{% else %}Optional{% endif %}
+
+{% endfor %}
+
+{% if section.mermaid %}
+━━━━━━━━━━━━━━━━━━━━━━━━
+DIAGRAM FIELD (conditional)
+━━━━━━━━━━━━━━━━━━━━━━━━
+"{{ section.mermaid.output_field }}"
+  {{ section.mermaid.instruction }}
+  If included, return as a raw Mermaid syntax string.
+  Example: "graph TD\n  A[Trigger] --> B[Mechanism]\n  B --> C[Outcome]"
+  If not included, omit the field entirely — do not return null or empty string.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

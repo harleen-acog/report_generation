@@ -1,7 +1,7 @@
 import { generateText, generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { LLMClient } from "./llm_types.js";
-import { getApiKey } from "../config/store.js";
+import { getApiKey } from "../configs/store.js";
 
 export class GeminiClient implements LLMClient {
   private model;
@@ -16,7 +16,7 @@ export class GeminiClient implements LLMClient {
     // set env for SDK
     process.env.GOOGLE_GENERATIVE_AI_API_KEY = apiKey;
 
-    this.model = google("gemini-flash-latest");
+    this.model = google("gemini-3.1-flash-lite");
   }
 
   // simple text response

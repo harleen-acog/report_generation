@@ -1,0 +1,81 @@
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate epidemiology data for the disease below.
+This section feeds directly into charts and data tables
+in a professional pharma report — precision is critical.
+
+DISEASE: {{ disease.name }}
+{% if disease.description %}
+DESCRIPTION: {{ disease.description }}
+{% endif %}
+
+{% if context %}
+─────────────────────────────────────
+CONTEXT FROM PREVIOUS SECTIONS:
+{{ context }}
+─────────────────────────────────────
+Ensure figures are consistent with the disease
+profile already established.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURED FIELDS
+Be precise. Use numeric values wherever possible.
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type       : {{ field.type }}
+  Task       : {{ field.description }}
+  {% if field.example %}
+  Example    : {{ field.example | dump }}
+  {% endif %}
+  {% if field.required %}⚠ Required{% else %}Optional — omit if no reliable data{% endif %}
+
+{% endfor %}
+
+{% if section.charts %}
+━━━━━━━━━━━━━━━━━━━━━━━━
+CHART DATA FIELDS
+━━━━━━━━━━━━━━━━━━━━━━━━
+The following fields will be used to render charts.
+Return data in the exact shape specified — numeric values only for Y axis.
+
+{% for chart in section.charts %}
+Field      : "{{ chart.source_field }}"
+Chart type : {{ chart.type }}
+X axis     : "{{ chart.x }}"
+Y axis     : "{{ chart.y }}" (must be a number)
+Title      : {{ chart.title }}
+{% endfor %}
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

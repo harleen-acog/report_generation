@@ -1,0 +1,115 @@
+{# etiology_risk.prompt.njk #}
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate etiology and risk factor data for the disease below.
+
+DISEASE: {{ disease.name }}
+{% if disease.description %}
+DESCRIPTION: {{ disease.description }}
+{% endif %}
+
+{% if context %}
+─────────────────────────────────────
+CONTEXT FROM PREVIOUS SECTIONS:
+{{ context }}
+─────────────────────────────────────
+Use this context to ensure your response is consistent
+with what has already been established about this disease.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+{% if section.structured_fields %}
+STRUCTURED FIELDS
+Return these as exact JSON types. Be specific and evidence-based.
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type    : {{ field.type }}{% if field.items %} of {{ field.items }}{% endif %}
+
+  Task    : {{ field.description }}
+  {% if field.example %}
+  Example : {{ field.example | dump }}
+  {% endif %}
+  {% if field.required %}
+  ⚠ Required
+  {% else %}
+  Optional — omit if no reliable data
+  {% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if section.freetext_fields %}
+NARRATIVE FIELDS
+Write in prose. Respect the word limits strictly.
+
+{% for field in section.freetext_fields %}
+"{{ field.name }}"
+  Task      : {{ field.description }}
+  Word limit: {{ field.min_words }}–{{ field.max_words }} words
+  {% if field.required %}
+  ⚠ Required
+  {% else %}
+  Optional
+  {% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if section.mermaid %}
+DIAGRAM FIELD
+"{{ section.mermaid.output_field }}"
+  {{ section.mermaid.instruction }}
+  Return as a raw Mermaid syntax string.
+  Example format: "graph TD\n  A[Node] --> B[Node]"
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+{% if section.prompt_hints.avoid %}
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if section.prompt_hints.prefer %}
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if section.charts %}
+CHART DATA FIELDS
+The following fields will be used to render charts.
+Return data in the exact shape specified.
+
+{% for chart in section.charts %}
+Field     : "{{ chart.source_field }}"
+Chart type: {{ chart.type }}
+X axis    : "{{ chart.x }}"
+Y axis    : "{{ chart.y }}"
+Caption   : {{ chart.caption }}
+
+{% endfor %}
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

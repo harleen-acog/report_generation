@@ -1,0 +1,114 @@
+{
+  "section": "key_insights",
+  "title": "Key Insights & Future Outlook",
+  "group": 3,
+  "mode": "hybrid",
+  "slide_budget": 1,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": false
+  },
+
+  "structured_fields": [
+    {
+      "name": "top_challenges",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Major challenges facing the disease area — clinical, scientific, commercial or access related. Each as a concise punchy string.",
+      "example": [
+        "Delayed diagnosis due to heterogeneous symptom presentation",
+        "Limited efficacy of current biologics in renal lupus subpopulation",
+        "High treatment costs restricting access in low income markets"
+      ]
+    },
+    {
+      "name": "research_gaps",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Key areas where scientific or clinical evidence is lacking or insufficient. Each as a concise string.",
+      "example": [
+        "Paediatric dosing data for newer biologics",
+        "Long term safety data for TYK2 inhibitors in SLE",
+        "Biomarkers predicting flare risk in remission patients"
+      ]
+    },
+    {
+      "name": "future_directions",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Emerging research directions, therapeutic approaches or strategic opportunities likely to shape the field over the next 5-10 years. Each as a concise string.",
+      "example": [
+        "CAR-T cell therapy showing early promise in refractory SLE",
+        "Precision medicine approaches using omics profiling for patient stratification",
+        "Biosimilar entry expected to reshape market access dynamics post 2026"
+      ]
+    },
+    {
+      "name": "executive_takeaways",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Short punchy strategic takeaways for a senior pharma or biotech audience — what matters most from this report. Each as a single impactful sentence.",
+      "example": [
+        "The SLE market is poised for significant growth driven by biologic adoption and pipeline maturity",
+        "Unmet need remains highest in renal and neuropsychiatric lupus — clear opportunity for differentiation",
+        "Early diagnosis investment could unlock substantial patient population currently going untreated"
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "strategic_summary",
+      "required": true,
+      "description": "A rich synthesising narrative that pulls together the most important insights from across the full report — epidemiology, treatment landscape, pipeline and market dynamics. Written for a senior executive audience. Should feel conclusive and forward looking.",
+      "min_words": 150,
+      "max_words": 300
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": [
+      "top_challenges",
+      "research_gaps",
+      "future_directions",
+      "executive_takeaways",
+      "strategic_summary"
+    ],
+    "min_array_length": {
+      "top_challenges": 3,
+      "research_gaps": 3,
+      "future_directions": 3,
+      "executive_takeaways": 3
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "strategic, confident and forward looking — written for a senior pharma or biotech executive audience",
+    "avoid": [
+      "repeating content verbatim from earlier sections",
+      "generic insight statements that could apply to any disease",
+      "overly cautious language that dilutes strategic impact",
+      "introducing new facts not grounded in the context provided"
+    ],
+    "prefer": [
+      "insights that synthesise across multiple sections rather than summarising one",
+      "executive takeaways that are specific, actionable and commercially relevant",
+      "future directions grounded in real pipeline and research activity",
+      "strategic summary that tells a coherent story not just a list of points"
+    ]
+  }
+}

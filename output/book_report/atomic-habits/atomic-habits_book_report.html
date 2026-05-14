@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Atomic Habits</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Calibri', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.65;
+      color: #1e2d3d;
+    }
+
+    /* ── Cover page ── */
+    .cover-page {
+      width: 100%;
+      height: 100vh;
+      min-height: 1050px;
+      background: linear-gradient(160deg, #060f1e 0%, #0a1f3d 45%, #0d3060 75%, #0f4080 100%);
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .cover-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    .cover-accent-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4c9be8 0%, #7ec8f0 50%, transparent 100%);
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 64px 80px 56px;
+      width: 100%;
+    }
+
+    .cover-logo { height: 36px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
+
+    .cover-label {
+      font-size: 11pt;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #4c9be8;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .cover-title {
+      font-size: 42pt;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .cover-subtitle {
+      font-size: 14pt;
+      color: rgba(150, 200, 255, 0.7);
+      font-weight: 400;
+    }
+
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(126, 200, 240, 0.2);
+      padding-top: 24px;
+      gap: 32px;
+    }
+
+    .cover-footer-left { display: flex; flex-direction: column; gap: 6px; }
+
+    .cover-meta-row { display: flex; gap: 12px; }
+
+    .meta-label {
+      font-size: 9pt;
+      color: rgba(150, 200, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      min-width: 100px;
+    }
+
+    .meta-val {
+      font-size: 9pt;
+      color: rgba(200, 230, 255, 0.85);
+      font-weight: 500;
+    }
+
+    .cover-footer-right { max-width: 320px; }
+
+    .cover-disclaimer {
+      font-size: 8pt;
+      color: rgba(150, 200, 255, 0.4);
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    /* ── Page break ── */
+    .page-break { page-break-after: always; }
+
+    /* ── Body content ── */
+    .content-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 64px;
+    }
+
+    h1 {
+      font-size: 26pt;
+      color: #0f2d50;
+      border-bottom: 3px solid #4c9be8;
+      padding-bottom: 12px;
+      margin: 36px 0 20px;
+    }
+
+    h2 {
+      font-size: 17pt;
+      color: #065a82;
+      border-bottom: 1px solid #c8dff0;
+      padding-bottom: 8px;
+      margin: 32px 0 14px;
+    }
+
+    h3 {
+      font-size: 13pt;
+      color: #1c7293;
+      margin: 20px 0 8px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    ul, ol { padding-left: 24px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    th {
+      background: #0f2d50;
+      color: white;
+      padding: 9px 11px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 7px 11px;
+      border-bottom: 1px solid #e4edf5;
+    }
+
+    tr:nth-child(even) td { background: #f4f8fc; }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    blockquote {
+      border-left: 4px solid #f59e0b;
+      padding: 10px 16px;
+      color: #7c5a00;
+      background: #fffbeb;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #c8dff0;
+      margin: 28px 0;
+    }
+
+    strong { font-weight: 700; }
+    em { font-style: italic; }
+
+    @media print {
+      .content-wrap { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="cover-page">
+    <div class="cover-bg-grid"></div>
+    <div class="cover-accent-bar"></div>
+
+    <div class="cover-content">
+      <div class="cover-logo-wrap">
+        <img
+          src="https://www.aganitha.ai/wp-content/uploads/2023/05/aganitha-logo.png"
+          alt="Aganitha"
+          class="cover-logo"
+          onerror="this.style.display='none'"
+        />
+      </div>
+
+      <div class="cover-body">
+        <div class="cover-label">Disease Intelligence Report</div>
+        <h1 class="cover-title">Atomic Habits</h1>
+        <p class="cover-subtitle">Comprehensive Clinical &amp; Market Intelligence</p>
+      </div>
+
+      <div class="cover-footer">
+        <div class="cover-footer-left">
+          <div class="cover-meta-row"><span class="meta-label">Prepared by</span><span class="meta-val">Aganitha Cognitive Solutions</span></div>
+          <div class="cover-meta-row"><span class="meta-label">Generated</span><span class="meta-val">13 May 2026</span></div>
+          <div class="cover-meta-row"><span class="meta-label">Classification</span><span class="meta-val">Confidential</span></div>
+        </div>
+        <div class="cover-footer-right">
+          <p class="cover-disclaimer">This report is AI-generated and intended for internal research purposes only. Not for distribution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-break"></div>
+  <div class="content-wrap">
+    <h1>Atomic Habits</h1>
+<p><strong>Structured literary insights report covering summary, themes, key points and related works</strong></p>
+<p><strong>Prepared by:</strong> Aganitha Cognitive Solutions
+<strong>Generated:</strong> 13 May 2026
+<strong>Classification:</strong> Confidential — For Internal Research Use Only</p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#book-overview">Book Overview</a></li>
+</ol>
+<hr>
+<h2>Book Overview</h2>
+<p>James Clear’s Atomic Habits serves as a meticulous exploration of the architecture of human behavior. Clear posits that the most profound transformations do not arise from seismic shifts of will, but from the quiet, rhythmic accumulation of &#39;atomic&#39; changes. By dissecting the feedback loop of cue, craving, response, and reward, he reveals how the mundane becomes the monumental through the alchemy of compounding interest applied to conduct.</p>
+<p>Clear shifts the focus from the ephemeral allure of goals to the enduring strength of systems. He argues that we do not rise to the level of our goals, but rather fall to the level of our systems. This philosophical pivot encourages a redefinition of the self; instead of chasing a destination, the individual cultivates a new identity. Through the Four Laws of Behavior Change, Clear offers a graceful bridge between the rigorous insights of behavioral science and the practicalities of the everyday, inviting readers to redesign their environments and, ultimately, their lives.</p>
+<p>In an era characterized by relentless distraction and the hollow pursuit of instant gratification, Clear’s work offers a grounding counter-narrative. It champions the virtue of patience and the profound significance of the marginal gain. By democratizing complex psychological principles, the book provides a pragmatic lexicon for personal agency, making it an essential text for those seeking to master the intricacies of modern living and intentional self-evolution.</p>
+<h3>Title</h3>
+<p>Atomic Habits</p>
+<h3>Author</h3>
+<p>James Clear</p>
+<h3>Genres</h3>
+<ul>
+<li>Non-fiction</li>
+<li>Self-help</li>
+<li>Psychology</li>
+<li>Productivity</li>
+</ul>
+<h3>Themes</h3>
+<ul>
+<li>incremental progress</li>
+<li>systemic behavior design</li>
+<li>identity-based change</li>
+<li>the compounding of habits</li>
+<li>environmental architecture</li>
+</ul>
+<h3>Key Points</h3>
+<ul>
+<li>Small 1% improvements compound over time, leading to a radical difference in long-term outcomes.</li>
+<li>Effective systems are superior to goals because they focus on the process rather than a singular destination.</li>
+<li>The Four Laws of Behavior Change provide a framework to make good habits obvious, attractive, easy, and satisfying.</li>
+<li>Identity-based habits shift the focus to who you wish to become rather than what you want to achieve.</li>
+<li>Environment design is more effective than willpower for maintaining long-term behavioral changes.</li>
+</ul>
+<h3>Related Books</h3>
+<ul>
+<li>The Power of Habit by Charles Duhigg</li>
+<li>Tiny Habits by B.J. Fogg</li>
+<li>Deep Work by Cal Newport</li>
+<li>Thinking, Fast and Slow by Daniel Kahneman</li>
+</ul>
+<hr>
+
+  </div>
+</body>
+</html>

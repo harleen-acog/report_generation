@@ -1,0 +1,133 @@
+{
+  "section": "etiology_risk",
+  "title": "Etiology & Risk Factors",
+  "group": 1,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["genetic_causes", "key_triggers", "comorbidities"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "genetic_causes",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Known genetic mutations or hereditary factors linked to the disease",
+      "example": ["BRCA1 mutation", "HLA-DR4 allele"]
+    },
+    {
+      "name": "environmental_factors",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Environmental or lifestyle contributors such as diet, toxins, occupation",
+      "example": ["smoking", "UV exposure", "high-fat diet"]
+    },
+    {
+      "name": "infectious_autoimmune_triggers",
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Known infectious agents or autoimmune mechanisms that trigger or worsen the disease",
+      "example": ["EBV infection", "molecular mimicry", "T-cell dysregulation"]
+    },
+    {
+      "name": "comorbidities",
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Conditions that commonly co-occur or predispose patients to this disease",
+      "example": ["Type 2 diabetes", "obesity", "hypertension"]
+    },
+    {
+      "name": "risk_score_by_factor",
+      "type": "array",
+      "required": false,
+      "description": "Relative risk contribution of each factor category — used for chart rendering",
+      "items": {
+        "type": "object",
+        "properties": {
+          "factor": "string",
+          "relative_risk": "number",
+          "confidence": "string"
+        }
+      },
+      "example": [
+        { "factor": "Genetic", "relative_risk": 3.2, "confidence": "high" },
+        { "factor": "Environmental", "relative_risk": 1.8, "confidence": "medium" },
+        { "factor": "Infectious trigger", "relative_risk": 2.1, "confidence": "medium" },
+        { "factor": "Comorbidity", "relative_risk": 1.4, "confidence": "low" }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "narrative",
+      "required": true,
+      "description": "2-3 paragraph clinical narrative explaining how these factors interact and contribute to disease onset",
+      "min_words": 100,
+      "max_words": 250
+    },
+    {
+      "name": "key_triggers",
+      "required": false,
+      "description": "One concise paragraph on the most clinically significant triggers — what pushes a predisposed patient into active disease",
+      "min_words": 50,
+      "max_words": 100
+    }
+  ],
+
+  "charts": [
+    {
+      "id": "risk_factor_chart",
+      "type": "bar",
+      "source_field": "risk_score_by_factor",
+      "x": "factor",
+      "y": "relative_risk",
+      "title": "Relative Risk by Factor Category",
+      "caption": "Higher values indicate stronger association with disease onset"
+    }
+  ],
+
+  "mermaid": {
+    "authored_by": "llm",
+    "instruction": "Generate a Mermaid flowchart showing how genetic predisposition, environmental triggers, and immune dysregulation converge to cause disease onset. Use graph TD direction.",
+    "output_field": "mermaid_diagram",
+    "fallback": null
+  },
+
+  "validation": {
+    "required_fields": ["genetic_causes", "environmental_factors", "narrative"],
+    "min_array_length": {
+      "genetic_causes": 2,
+      "environmental_factors": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "clinical and evidence-based",
+    "avoid": [
+      "speculative causes without evidence",
+      "overly generic statements like 'lifestyle factors play a role'",
+      "repeating the disease name excessively"
+    ],
+    "prefer": [
+      "specific named genetic loci or mutations where known",
+      "quantified risk where available",
+      "distinguishing between correlation and causation"
+    ]
+  }
+}

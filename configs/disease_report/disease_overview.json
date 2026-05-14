@@ -1,0 +1,119 @@
+{
+  "section": "disease_overview",
+  "title": "Disease Overview",
+  "group": 1,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["definition", "icd_codes", "subtypes"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "icd_codes",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Exact ICD-10 and ICD-11 codes for this disease and its primary variants",
+      "example": ["M32 (ICD-10) — Systemic lupus erythematosus", "4A40 (ICD-11) — SLE"]
+    },
+    {
+      "name": "subtypes",
+      "type": "array",
+      "required": true,
+      "description": "Known classification subtypes of this disease, each with name, brief description and severity level",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": "string",
+          "description": "string",
+          "severity": "mild | moderate | severe"
+        }
+      },
+      "example": [
+        {
+          "name": "Cutaneous Lupus",
+          "description": "Affects primarily the skin with rashes and lesions",
+          "severity": "mild"
+        },
+        {
+          "name": "Systemic Lupus Erythematosus",
+          "description": "Multi-organ involvement including kidneys, heart and brain",
+          "severity": "severe"
+        }
+      ]
+    },
+    {
+      "name": "historical_milestones",
+      "type": "array",
+      "required": true,
+      "description": "Key historical events in the understanding and treatment of this disease — ordered chronologically",
+      "items": {
+        "type": "object",
+        "properties": {
+          "year": "number",
+          "event": "string"
+        }
+      },
+      "example": [
+        { "year": 1851, "event": "Term lupus erythematosus first used by Cazenave" },
+        { "year": 1948, "event": "LE cell phenomenon discovered by Hargraves" }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "definition",
+      "required": true,
+      "description": "A clear, clinically grounded definition of the disease — what it is, what systems it affects, and how it is broadly characterised",
+      "min_words": 60,
+      "max_words": 120
+    },
+    {
+      "name": "nomenclature_notes",
+      "required": false,
+      "description": "Brief note on any naming conventions, historical name changes, or regional terminology differences worth flagging",
+      "min_words": 30,
+      "max_words": 80
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": ["icd_codes", "subtypes", "historical_milestones", "definition"],
+    "min_array_length": {
+      "icd_codes": 1,
+      "subtypes": 2,
+      "historical_milestones": 3
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "clinical, authoritative, accessible to a medical but non-specialist audience",
+    "avoid": [
+      "overly technical jargon without explanation",
+      "vague definitions like 'a complex disease'",
+      "inventing ICD codes — only use verified codes",
+      "listing more than 8 historical milestones"
+    ],
+    "prefer": [
+      "precise clinical language",
+      "specific organ systems named in definition",
+      "chronologically ordered milestones",
+      "severity levels that reflect clinical consensus"
+    ]
+  }
+}

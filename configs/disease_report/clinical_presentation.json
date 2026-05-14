@@ -1,0 +1,134 @@
+{
+  "section": "clinical_presentation",
+  "title": "Clinical Presentation",
+  "group": 2,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["symptoms", "disease_stages", "complications"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "symptoms",
+      "type": "array",
+      "required": true,
+      "description": "Key signs and symptoms of the disease — each with frequency and severity properties",
+      "items": {
+        "type": "object",
+        "properties": {
+          "symptom": "string",
+          "frequency": "common | occasional | rare",
+          "severity": "mild | moderate | severe"
+        }
+      },
+      "example": [
+        {
+          "symptom": "Malar rash",
+          "frequency": "common",
+          "severity": "mild"
+        },
+        {
+          "symptom": "Lupus nephritis",
+          "frequency": "occasional",
+          "severity": "severe"
+        }
+      ]
+    },
+    {
+      "name": "disease_stages",
+      "type": "array",
+      "required": true,
+      "description": "Clinical stages of disease progression — LLM determines appropriate properties based on disease context and clinical reality",
+      "items": {
+        "type": "object",
+        "description": "Each stage object should include properties that best describe that clinical stage. Suggested: name, severity, key_features, typical_duration. Use clinical judgment."
+      },
+      "example": [
+        {
+          "name": "Mild",
+          "severity": "mild",
+          "key_features": "Fatigue, joint pain, skin rashes",
+          "typical_duration": "Months to years"
+        },
+        {
+          "name": "Moderate",
+          "severity": "moderate",
+          "key_features": "Serositis, haematological involvement",
+          "typical_duration": "Variable"
+        }
+      ]
+    },
+    {
+      "name": "complications",
+      "type": "array",
+      "required": false,
+      "description": "Notable complications associated with disease progression",
+      "items": {
+        "type": "object",
+        "properties": {
+          "complication": "string",
+          "risk_level": "low | moderate | high",
+          "associated_stage": "string"
+        }
+      },
+      "example": [
+        {
+          "complication": "End-stage renal disease",
+          "risk_level": "high",
+          "associated_stage": "Severe"
+        },
+        {
+          "complication": "Cardiovascular disease",
+          "risk_level": "moderate",
+          "associated_stage": "Moderate to Severe"
+        }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "natural_history_prognosis",
+      "required": true,
+      "description": "Narrative covering the natural disease course — how it typically evolves over time, factors influencing prognosis, survival outcomes and quality of life impact",
+      "min_words": 100,
+      "max_words": 200
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": ["symptoms", "disease_stages", "natural_history_prognosis"],
+    "min_array_length": {
+      "symptoms": 4,
+      "disease_stages": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "clinical and descriptive — written for a medically literate audience",
+    "avoid": [
+      "listing symptoms without frequency or severity context",
+      "overly optimistic prognosis statements without evidence",
+      "conflating pathophysiology with clinical presentation"
+    ],
+    "prefer": [
+      "symptoms ordered from most to least common",
+      "staging that reflects recognised clinical classifications where they exist",
+      "prognosis narrative that acknowledges variability across patient populations"
+    ]
+  }
+}

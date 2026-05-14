@@ -1,0 +1,128 @@
+{
+  "section": "market_access",
+  "title": "Market & Access Landscape",
+  "group": 3,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["market_size", "regulatory_status"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "market_size",
+      "type": "object",
+      "required": true,
+      "description": "Global market size and forecast figures",
+      "properties": {
+        "current_value": {
+          "type": "string",
+          "description": "Current global market value with year reference",
+          "example": "USD 3.2 billion (2023)"
+        },
+        "forecast_value": {
+          "type": "string",
+          "description": "Projected market value at forecast horizon",
+          "example": "USD 6.8 billion by 2030"
+        },
+        "cagr": {
+          "type": "string",
+          "description": "Compound annual growth rate over forecast period",
+          "example": "11.3% CAGR 2023–2030"
+        },
+        "forecast_drivers": {
+          "type": "array",
+          "items": "string",
+          "description": "Key factors driving market growth",
+          "example": [
+            "Growing biologics adoption",
+            "Expanding diagnosis rates in emerging markets",
+            "Pipeline approvals expected 2025–2027"
+          ]
+        }
+      }
+    },
+    {
+      "name": "regulatory_status",
+      "type": "array",
+      "required": true,
+      "description": "Regulatory approval status of key drugs across major regions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "drug": "string",
+          "region": "string",
+          "status": "string"
+        }
+      },
+      "example": [
+        {
+          "drug": "Belimumab",
+          "region": "USA",
+          "status": "FDA approved 2011 — SLE and lupus nephritis"
+        },
+        {
+          "drug": "Anifrolumab",
+          "region": "EU",
+          "status": "EMA approved 2022 — moderate to severe SLE"
+        }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "reimbursement_access_narrative",
+      "required": true,
+      "description": "Narrative on reimbursement challenges, payer dynamics and patient access issues — include regional disparities where relevant",
+      "min_words": 80,
+      "max_words": 160
+    },
+    {
+      "name": "competitive_landscape_narrative",
+      "required": true,
+      "description": "Narrative on the competitive dynamics — key players, market share considerations, positioning of approved and pipeline assets and any emerging threats or opportunities",
+      "min_words": 80,
+      "max_words": 160
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": [
+      "market_size",
+      "regulatory_status",
+      "reimbursement_access_narrative",
+      "competitive_landscape_narrative"
+    ],
+    "min_array_length": {
+      "regulatory_status": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "commercially aware and analytically grounded — written for a pharma business audience",
+    "avoid": [
+      "inventing market figures — if unavailable note as estimate or unavailable",
+      "vague competitive landscape statements without named players",
+      "ignoring access disparities between high and low income markets"
+    ],
+    "prefer": [
+      "market figures with source context where possible",
+      "regulatory status that distinguishes between indications and regions",
+      "competitive narrative that connects to pipeline and unmet needs already established"
+    ]
+  }
+}

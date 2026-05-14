@@ -1,0 +1,75 @@
+{
+  "report_type": "book_report",
+  "version": "1.0",
+  "description": "Structured literary insights report covering summary, themes, key points and related works",
+
+  "input": {
+    "fields": [
+      {
+        "name": "name",
+        "flag": "--name",
+        "required": true,
+        "description": "Title of the book"
+      },
+      {
+        "name": "author",
+        "flag": "--author",
+        "required": true,
+        "description": "Author of the book"
+      },
+      {
+        "name": "description",
+        "flag": "--description",
+        "required": false,
+        "description": "Brief synopsis or context about the book"
+      },
+      {
+        "name": "depth",
+        "flag": "--depth",
+        "required": false,
+        "default": "medium",
+        "options": ["short", "medium", "detailed", "academic"],
+        "description": "Depth of the literary analysis"
+      },
+      {
+        "name": "style",
+        "flag": "--style",
+        "required": false,
+        "default": "literary",
+        "options": ["literary", "academic", "simplified", "executive"],
+        "description": "Tone and style of the generated report"
+      }
+    ]
+  },
+
+  "output": {
+    "formats": ["md", "docx", "pdf", "pptx"],
+    "output_dir": "./output/book_report",
+    "filename_template": "{{name}}_book_report",
+    "save_intermediate": true
+  },
+
+  "runner": {
+    "groups": [
+      {
+        "name": "full",
+        "description": "Single group — book report generates in one pass",
+        "mode": "sequential",
+        "pauseAfterMs": 0,
+        "sections": [
+          "book_overview"
+        ]
+      }
+    ],
+    "retry": {
+      "max_retries": 3,
+      "backoff_ms": [5000, 10000, 20000],
+      "on_exhausted": "placeholder"
+    },
+    "context": {
+      "enabled": false,
+      "max_words": 0,
+      "style": "none"
+    }
+  }
+}

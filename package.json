@@ -1,5 +1,5 @@
 {
-  "name": "@aganitha/author-cli",
+  "name": "disease-reports",
   "version": "1.1.0",
   "description": "CLI to explore authors and generate book summaries using LLM",
   "type": "module",
@@ -22,7 +22,8 @@
     "slides:build": "bun src/export/exportSlides.ts",
     "slides:ppt": "marp generated/slides/*.md --pptx --theme-set src/themes/book-theme.css && mv generated/slides/*.pptx generated/ppt/",
     "slides:pdf": "marp generated/slides/*.md --pdf --theme-set src/themes/book-theme.css && mv generated/slides/*.pdf generated/pdf/",
-    "slides:html": "marp generated/slides/*.md --html --theme-set src/themes/book-theme.css && mv generated/slides/*.html generated/html/"
+    "slides:html": "marp generated/slides/*.md --html --theme-set src/themes/book-theme.css && mv generated/slides/*.html generated/html/",
+    "test:workflow": "bun src/tests/workflow/test_rendering.ts"
   },
   "keywords": [
     "cli",
@@ -35,9 +36,12 @@
   "author": "Harleen Kaur",
   "license": "ISC",
   "dependencies": {
+    "@aganitha/atk-debug": "^1.2.0",
     "@ai-sdk/google": "^3.0.65",
     "@marp-team/marp-cli": "^4.4.0",
     "ai": "^6.0.169",
+    "chart.js": "^4.4.0",
+    "chartjs-node-canvas": "^5.0.0",
     "commander": "^14.0.3",
     "conf": "^15.1.0",
     "docx": "^9.6.1",
@@ -45,6 +49,9 @@
     "gray-matter": "^4.0.3",
     "inquirer": "^13.4.2",
     "markdown-it": "^14.1.1",
+    "marked": "^9.0.0",
+    "nunjucks": "^3.2.4",
+    "puppeteer": "^24.43.1",
     "remark": "^15.0.1",
     "remark-parse": "^11.0.0",
     "unified": "^11.0.5",
@@ -52,8 +59,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@kazumatu981/markdown-it-kroki": "^1.3.6",
+    "@mermaid-js/mermaid-cli": "^11.14.0",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^25.6.0",
+    "@types/nunjucks": "^3.2.6",
     "typescript": "^6.0.3"
   }
 }

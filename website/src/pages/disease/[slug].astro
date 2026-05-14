@@ -1,0 +1,168 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getReportsByType, getReport } from "../../lib/reports";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+  const reports = getReportsByType("disease_report");
+  return reports.map((r) => ({ params: { slug: r.slug } }));
+}
+
+const { slug } = Astro.params;
+const report = getReport("disease_report", slug!);
+
+if (!report) {
+  return Astro.redirect("/");
+}
+
+const { meta, sections } = report;
+
+// render each section's markdown to HTML
+const renderedSections = sections.map((s) => ({
+  ...s,
+  html: marked(s.content),
+}));
+
+// disease-specific section icons
+const sectionIcons: Record<string, string> = {
+  "disease-overview": "🔬",
+  "epidemiology": "📊",
+  "etiology-risk-factors": "⚗️",
+  "pathophysiology-mechanism": "🧬",
+  "clinical-presentation": "🩺",
+  "diagnosis": "📋",
+  "current-treatment-landscape": "💊",
+  "pipeline-emerging-therapies": "🔭",
+  "market-access-landscape": "📈",
+  "key-insights-future-outlook": "💡",
+};
+---
+
+<Base title={`${meta.name} — Disease Report`}>
+  <div class="min-h-screen bg-ink-50 theme-pharma">
+
+    <!-- Top Nav -->
+    <header class="border-b border-ink-200 bg-ink-50/90 backdrop-blur-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="/" class="text-ink-400 hover:text-ink-700 transition-colors text-sm flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            All Reports
+          </a>
+          <span class="text-ink-200">/</span>
+          <span class="text-xs font-mono text-pharma-600 bg-pharma-50 px-2 py-1 rounded">
+            Disease Report
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-ink-300 font-mono hidden md:block">
+            {meta.generated_at
+              ? new Date(meta.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+              : ""}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-8 flex gap-8">
+
+      <!-- Sidebar TOC -->
+      <aside class="hidden lg:block w-64 shrink-0">
+        <div class="sticky top-20">
+          <p class="text-xs font-mono text-ink-400 uppercase tracking-widest mb-4">Contents</p>
+          <nav class="space-y-0.5" id="toc">
+            {renderedSections.map((s) => (
+              <a
+                href={`#${s.id}`}
+                class="toc-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-ink-500 hover:text-ink-900 hover:bg-ink-100 transition-all group"
+                data-section={s.id}
+              >
+                <span class="text-base leading-none">
+                  {sectionIcons[s.id] ?? "📄"}
+                </span>
+                <span class="leading-tight">{s.title}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 min-w-0">
+
+        <!-- Hero -->
+        <div class="mb-10 animate-fade-up">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs font-mono text-pharma-600 bg-pharma-50 border border-pharma-100 px-3 py-1 rounded-full">
+              Pharmaceutical Disease Report
+            </span>
+          </div>
+          <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-950 leading-tight mb-3">
+            {meta.name}
+          </h1>
+          <p class="text-ink-400 text-sm">
+            {renderedSections.length} sections · AI-generated · Not for clinical use
+          </p>
+        </div>
+
+        <!-- Sections -->
+        <div class="space-y-12">
+          {renderedSections.map((section, i) => (
+            <section
+              id={section.id}
+              class="scroll-mt-20 animate-fade-up"
+              style={`animation-delay: ${i * 0.05}s; opacity: 0`}
+            >
+              <div class="flex items-center gap-3 mb-5">
+                <span class="text-2xl">{sectionIcons[section.id] ?? "📄"}</span>
+                <h2 class="font-display text-2xl font-semibold text-ink-900">
+                  {section.title}
+                </h2>
+              </div>
+
+              <div class="prose-report bg-white border border-ink-100 rounded-xl p-6 md:p-8 shadow-sm">
+                <Fragment set:html={section.html} />
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="mt-16 pt-8 border-t border-ink-200 flex items-center justify-between">
+          <a href="/" class="text-sm text-ink-400 hover:text-ink-700 transition-colors flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to all reports
+          </a>
+          <span class="text-xs text-ink-300 font-mono">AI-generated · Not for clinical use</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // highlight active TOC item on scroll
+  const tocItems = document.querySelectorAll('.toc-item');
+  const sections = document.querySelectorAll('section[id]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocItems.forEach((item) => {
+            item.classList.remove('bg-pharma-50', 'text-pharma-700', 'font-medium');
+          });
+          const active = document.querySelector(`.toc-item[data-section="${entry.target.id}"]`);
+          active?.classList.add('bg-pharma-50', 'text-pharma-700', 'font-medium');
+        }
+      });
+    },
+    { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+  );
+
+  sections.forEach((s) => observer.observe(s));
+</script>

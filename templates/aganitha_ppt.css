@@ -1,0 +1,241 @@
+/* @theme aganitha_ppt */
+section {
+ background: linear-gradient(145deg, #0b1c35 0%, #0f2d50 55%, #0d3d6b 100%);
+ color: #ddeeff;
+ font-family: 'Segoe UI', 'Calibri', Arial, sans-serif;
+ font-size: 22px;
+ line-height: 1.4;
+ padding: 40px 56px 38px;
+ position: relative;
+ overflow: hidden;
+}
+
+/* subtle grid texture */
+section::before {
+ content: '';
+ position: absolute;
+ inset: 0;
+ background-image:
+   linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+   linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+ background-size: 48px 48px;
+ pointer-events: none;
+}
+
+/* footer branding */
+section::after {
+ content: 'Aganitha Cognitive Solutions  |  Confidential';
+ position: absolute;
+ bottom: 14px;
+ right: 44px;
+ font-size: 10px;
+ color: rgba(150, 200, 255, 0.35);
+ letter-spacing: 0.03em;
+ pointer-events: none;
+}
+
+/* â”€â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+h1 {
+ font-size: 48px;
+ font-weight: 700;
+ color: #ffffff;
+ margin: 0 0 18px;
+ line-height: 1.15;
+ letter-spacing: -0.01em;
+}
+
+h2 {
+ font-size: 34px;
+ font-weight: 600;
+ color: #7ec8f0;
+ border-bottom: 2px solid rgba(126, 200, 240, 0.3);
+ padding-bottom: 10px;
+ margin: 0 0 22px;
+}
+
+h3 {
+ font-size: 26px;
+ font-weight: 600;
+ color: #a8d8f0;
+ margin: 16px 0 10px;
+}
+
+p {
+ margin: 0 0 12px;
+ font-size: inherit;
+}
+
+/* â”€â”€â”€ Lists â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+ul,
+ol {
+ padding-left: 26px;
+ margin: 0 0 12px;
+}
+
+li {
+ margin-bottom: 8px;
+ color: #cce4f7;
+ font-size: inherit;
+}
+
+li::marker {
+ color: #4c9be8;
+}
+
+table {
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 16px;
+ margin-top: 10px;
+}
+
+th {
+ background: rgba(76, 155, 232, 0.25);
+ color: #7ec8f0;
+ padding: 10px 14px;
+ text-align: left;
+ font-weight: 600;
+ border-bottom: 2px solid rgba(76, 155, 232, 0.4);
+ letter-spacing: 0.02em;
+}
+
+td {
+ padding: 9px 14px;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+ color: #cce4f7;
+}
+
+tr:nth-child(even) td {
+ background: rgba(255, 255, 255, 0.04);
+}
+
+img {
+ max-width: 100%;
+ height: auto;
+ border-radius: 6px;
+ display: block;
+ margin: 14px auto;
+}
+
+blockquote {
+ border-left: 4px solid #f59e0b;
+ background: rgba(245, 158, 11, 0.1);
+ padding: 12px 18px;
+ color: #fcd34d;
+ border-radius: 0 6px 6px 0;
+ margin: 12px 0;
+ font-size: 18px;
+}
+
+.cols {
+ display: flex;
+ gap: 40px;
+ align-items: flex-start;
+ margin-top: 20px;
+ justify-content: start;
+}
+
+.col-left {
+ flex: 1.2;
+}
+
+.col-right {
+ flex: 0.8;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+}
+
+
+/* Cover Slide */
+section.cover {
+ background: linear-gradient(160deg, #060f1e 0%, #0a1f3d 45%, #0d3060 75%, #0f4080 100%);
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: flex-start;
+ padding: 60px;
+}
+
+section.cover::before {
+ background-size: 80px 80px;
+ background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+}
+
+section.cover h1 {
+ font-size: 64px;
+ margin-bottom: 24px;
+ text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+section.cover h2 {
+ border: none;
+ font-size: 24px;
+ color: #4c9be8;
+ margin-bottom: 60px;
+}
+
+/* Data / Table Slide */
+section.data {
+ padding-top: 30px;
+}
+
+section.data table {
+ background: rgba(255,255,255,0.03);
+ border-radius: 8px;
+ overflow: hidden;
+ box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* Insights Slide */
+section.insights {
+ background: linear-gradient(145deg, #0d1b2a 0%, #1b263b 100%);
+}
+
+section.insights h2 {
+ color: #e0e1dd;
+}
+
+section.insights li {
+ background: rgba(76, 155, 232, 0.1);
+ padding: 10px 16px;
+ border-radius: 6px;
+ margin-bottom: 12px;
+ list-style: none;
+ border-left: 4px solid #4c9be8;
+}
+
+/* â”€â”€â”€ Elements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+img {
+ max-width: 100%;
+ height: auto;
+ border-radius: 12px;
+ box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+ border: 1px solid rgba(255,255,255,0.1);
+ margin: 10px 0;
+}
+
+/* Custom Highlight box */
+.highlight {
+ background: rgba(76, 155, 232, 0.15);
+ border: 1px solid rgba(76, 155, 232, 0.3);
+ padding: 20px;
+ border-radius: 12px;
+ margin-top: 20px;
+}
+
+section.img-right .cols {
+ display:flex;
+ gap:40px;
+ align-items:center;
+}
+
+section.img-right .col-left {
+ flex:1.2;
+}
+
+section.img-right .col-right {
+ flex:0.8;
+}
+

@@ -1,0 +1,112 @@
+{
+  "section": "pathophysiology",
+  "title": "Pathophysiology & Mechanism",
+  "group": 1,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["key_pathways", "disease_stages"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "key_pathways",
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Primary molecular or cellular pathways implicated in disease mechanism",
+      "example": ["Type I interferon pathway", "NF-κB signalling", "complement activation"]
+    },
+    {
+      "name": "biomarkers",
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Key biomarkers associated with disease activity or progression",
+      "example": ["Anti-dsDNA antibodies", "C3/C4 complement levels", "ESR", "CRP"]
+    },
+    {
+      "name": "disease_stages",
+      "type": "array",
+      "required": true,
+      "description": "Progressive stages of disease — LLM determines appropriate properties per stage based on disease context",
+      "items": {
+        "type": "object",
+        "description": "Each stage object should include whatever properties best describe that stage — suggested: name, mechanism, timeline, clinical_features. Use judgment based on the disease."
+      },
+      "example": [
+        {
+          "name": "Initiation",
+          "mechanism": "Loss of self-tolerance and autoantibody production",
+          "timeline": "Years before symptoms",
+          "clinical_features": "Subclinical, detectable via ANA testing"
+        },
+        {
+          "name": "Propagation",
+          "mechanism": "Immune complex deposition and complement activation",
+          "timeline": "Early symptomatic phase",
+          "clinical_features": "Joint pain, fatigue, skin rashes"
+        }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "mechanism_narrative",
+      "required": true,
+      "description": "Rich narrative explaining the core molecular and cellular mechanisms driving the disease — how immune dysregulation, genetic factors and environmental triggers interact at a biological level",
+      "min_words": 150,
+      "max_words": 300
+    },
+    {
+      "name": "genetics_omics_narrative",
+      "required": false,
+      "description": "Narrative covering relevant genetic predispositions, epigenetic factors and omics findings — integrated naturally into the pathophysiology story rather than listed separately",
+      "min_words": 60,
+      "max_words": 150
+    }
+  ],
+
+  "charts": null,
+
+  "mermaid": {
+    "authored_by": "llm",
+    "required": false,
+    "instruction": "If the disease mechanism has a clear directional flow (triggers → molecular events → tissue damage → clinical outcome), generate a Mermaid flowchart using graph TD direction that captures this. If the mechanism is too complex or non-linear to represent cleanly in Mermaid, omit this field entirely.",
+    "output_field": "mermaid_diagram",
+    "fallback": null
+  },
+
+  "validation": {
+    "required_fields": ["key_pathways", "disease_stages", "mechanism_narrative"],
+    "min_array_length": {
+      "key_pathways": 2,
+      "disease_stages": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "scientific but accessible — assume a medically literate but non-specialist audience",
+    "avoid": [
+      "oversimplifying complex mechanisms to the point of inaccuracy",
+      "listing pathways without explaining their role",
+      "forcing a Mermaid diagram if the mechanism does not suit a linear flow"
+    ],
+    "prefer": [
+      "connecting molecular events to clinical consequences",
+      "explaining why pathways matter clinically not just naming them",
+      "using disease stage names that reflect clinical or biological reality"
+    ]
+  }
+}

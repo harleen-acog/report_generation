@@ -1,0 +1,79 @@
+{% extends "base.prompt.njk" %}
+
+{% block section_specific %}
+
+Generate a structured literary overview for the book below.
+
+TITLE: {{ topic.name }}
+{% if topic.author %}
+AUTHOR: {{ topic.author }}
+{% endif %}
+{% if topic.description %}
+DESCRIPTION: {{ topic.description }}
+{% endif %}
+{% if topic.depth %}
+SUMMARY DEPTH: {{ topic.depth }}
+  short    → concise overview (~80 words)
+  medium   → balanced summary (~150 words)
+  detailed → rich thematic summary (~300-400 words)
+  academic → analytical and literary tone with deeper interpretation
+{% endif %}
+{% if topic.style %}
+STYLE: {{ topic.style }}
+  Subtly reflect this style in the summary tone.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO GENERATE
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURED FIELDS
+Return these with exact types and shapes specified.
+
+{% for field in section.structured_fields %}
+"{{ field.name }}"
+  Type       : {{ field.type }}
+  Task       : {{ field.description }}
+  {% if field.example %}
+  Example    : {{ field.example | dump }}
+  {% endif %}
+  {% if field.required %}⚠ Required{% else %}Optional — omit if no reliable data{% endif %}
+
+{% endfor %}
+
+NARRATIVE FIELDS
+Write in clear prose. Respect the depth and word limits strictly.
+
+{% for field in section.freetext_fields %}
+"{{ field.name }}"
+  Task       : {{ field.description }}
+  Word limit : {{ field.min_words }}–{{ field.max_words }} words
+  {% if field.required %}⚠ Required{% else %}Optional{% endif %}
+
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tone: {{ section.prompt_hints.tone }}
+
+Avoid:
+{% for item in section.prompt_hints.avoid %}
+  - {{ item }}
+{% endfor %}
+
+Prefer:
+{% for item in section.prompt_hints.prefer %}
+  - {{ item }}
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Return a single valid JSON object.
+No backticks. No explanation. No extra keys.
+Start your response with { and end with }
+
+{% endblock %}

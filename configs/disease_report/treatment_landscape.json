@@ -1,0 +1,111 @@
+{
+  "section": "treatment_landscape",
+  "title": "Current Treatment Landscape",
+  "group": 2,
+  "mode": "hybrid",
+  "slide_budget": 2,
+
+  "render": {
+    "docx": "hybrid",
+    "pdf": "hybrid",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["approved_drugs", "unmet_needs_narrative"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "approved_drugs",
+      "type": "array",
+      "required": true,
+      "description": "Approved drug therapies for this disease — each with key clinical properties",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": "string",
+          "class": "string",
+          "line_of_therapy": "first | second | third | adjunct",
+          "mechanism": "string"
+        }
+      },
+      "example": [
+        {
+          "name": "Hydroxychloroquine",
+          "class": "Antimalarial",
+          "line_of_therapy": "first",
+          "mechanism": "Inhibits toll-like receptor signalling and reduces interferon production"
+        },
+        {
+          "name": "Belimumab",
+          "class": "Biologic — BLyS inhibitor",
+          "line_of_therapy": "second",
+          "mechanism": "Inhibits B-lymphocyte stimulator reducing autoantibody producing B cells"
+        }
+      ]
+    }
+  ],
+
+  "freetext_fields": [
+    {
+      "name": "standard_of_care_narrative",
+      "required": true,
+      "description": "Narrative describing the current standard of care — how treatment decisions are made, sequencing of therapies and overall treatment philosophy",
+      "min_words": 100,
+      "max_words": 200
+    },
+    {
+      "name": "non_pharmacologic_interventions",
+      "required": false,
+      "description": "Narrative on surgical, lifestyle or non-pharmacologic interventions that play a role in disease management",
+      "min_words": 50,
+      "max_words": 120
+    },
+    {
+      "name": "treatment_guidelines_narrative",
+      "required": false,
+      "description": "Narrative referencing key treatment guidelines — which bodies published them, what they recommend and any recent updates",
+      "min_words": 60,
+      "max_words": 120
+    },
+    {
+      "name": "unmet_needs_narrative",
+      "required": true,
+      "description": "Candid narrative on unmet medical needs — what current treatments fail to address, which patient populations are underserved and where clinical gaps remain",
+      "min_words": 80,
+      "max_words": 160
+    }
+  ],
+
+  "charts": null,
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": [
+      "approved_drugs",
+      "standard_of_care_narrative",
+      "unmet_needs_narrative"
+    ],
+    "min_array_length": {
+      "approved_drugs": 2
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "clinical and evidence-based — reference treatment guidelines where relevant",
+    "avoid": [
+      "listing drugs without clinical context",
+      "overstating efficacy of current treatments",
+      "generic unmet needs statements without disease-specific grounding"
+    ],
+    "prefer": [
+      "connecting drug mechanisms to disease pathophysiology already established",
+      "acknowledging where treatment response varies across patient subgroups",
+      "unmet needs narrative that is specific and commercially relevant"
+    ]
+  }
+}

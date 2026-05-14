@@ -1,36 +1,16 @@
-// // @ts-check
-// import { defineConfig } from "astro/config";
-// import tailwindcss from "@tailwindcss/vite";
-
-// export default defineConfig({
-//   vite: {
-//     plugins: [tailwindcss()],
-
-//     server: {
-//       fs: {
-//         allow: [".."],
-//       },
-//     },
-
-//   },
-
-// });
-// @ts-check
 import { defineConfig } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
-import node from "@astrojs/node";
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+  ],
+  output: "static",
   vite: {
-    plugins: [tailwindcss()],
-    server: {
-      fs: {
-        allow: [".."],
-      },
+    ssr: {
+      noExternal: ["gray-matter"],
     },
   },
-  output: "static", // 2. Keep site static, but allow server-side routes
-  adapter: node({
-    mode: "standalone",
-  }),
 });

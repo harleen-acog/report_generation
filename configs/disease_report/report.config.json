@@ -1,0 +1,94 @@
+{
+  "report_type": "disease_report",
+  "version": "1.0",
+  "description": "Comprehensive pharmaceutical disease landscape report covering epidemiology, pathophysiology, clinical presentation, diagnosis, treatment, pipeline and market dynamics",
+
+  "input": {
+    "fields": [
+      {
+        "name": "name",
+        "flag": "--name",
+        "required": true,
+        "description": "Name of the disease or condition"
+      },
+      {
+        "name": "description",
+        "flag": "--description",
+        "required": false,
+        "description": "Brief clinical context or background about the disease"
+      },
+      {
+        "name": "depth",
+        "flag": "--depth",
+        "required": false,
+        "default": "detailed",
+        "options": ["short", "medium", "detailed", "academic"],
+        "description": "Depth of content generated per section"
+      },
+      {
+        "name": "style",
+        "flag": "--style",
+        "required": false,
+        "default": "clinical",
+        "options": ["clinical", "executive", "academic", "simplified"],
+        "description": "Tone and style of the generated report"
+      }
+    ]
+  },
+
+  "output": {
+    "formats": ["md", "docx", "pdf", "pptx"],
+    "output_dir": "./output/disease_report",
+    "filename_template": "{{name}}_disease_report",
+    "save_intermediate": true
+  },
+
+  "runner": {
+    "groups": [
+      {
+        "name": "foundational",
+        "description": "Core disease background sections — no dependencies",
+        "mode": "parallel",
+        "pauseAfterMs": 8000,
+        "sections": [
+          "disease_overview",
+          "epidemiology",
+          "etiology_risk",
+          "pathophysiology"
+        ]
+      },
+      {
+        "name": "clinical",
+        "description": "Clinical sections — light dependency on foundational group",
+        "mode": "parallel",
+        "pauseAfterMs": 8000,
+        "sections": [
+          "clinical_presentation",
+          "diagnosis",
+          "treatment_landscape",
+          "pipeline"
+        ]
+      },
+      {
+        "name": "synthesis",
+        "description": "Synthesis sections — receive context summary from all previous groups",
+        "mode": "parallel",
+        "pauseAfterMs": 0,
+        "sections": [
+          "market_access",
+          "key_insights"
+        ]
+      }
+    ],
+    "retry": {
+      "max_retries": 3,
+      "backoff_ms": [5000, 10000, 20000],
+      "on_exhausted": "placeholder"
+    },
+    "context": {
+      "enabled": true,
+      "max_words": 100,
+      "style": "bullet"
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "section": "epidemiology",
+  "title": "Epidemiology",
+  "group": 1,
+  "mode": "structured",
+  "slide_budget": 1,
+
+  "render": {
+    "docx": "table",
+    "pdf": "table",
+    "marp": "bullets"
+  },
+
+  "context_output": {
+    "include_in_summary": true,
+    "summary_fields": ["prevalence", "incidence_rate", "demographics", "geographic_distribution"],
+    "summary_style": "brief"
+  },
+
+  "structured_fields": [
+    {
+      "name": "prevalence",
+      "type": "string",
+      "required": true,
+      "description": "Global or regional prevalence of the disease — cases per population unit",
+      "example": "1 in 1,000 globally; higher in women of childbearing age"
+    },
+    {
+      "name": "incidence_rate",
+      "type": "string",
+      "required": true,
+      "description": "Annual incidence rate — new cases per 100,000 population per year",
+      "example": "5.1 per 100,000 per year"
+    },
+    {
+      "name": "geographic_distribution",
+      "type": "array",
+      "required": true,
+      "description": "Prevalence breakdown by region — used for bar chart rendering",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region": "string",
+          "prevalence_per_100k": "number",
+          "notes": "string"
+        }
+      },
+      "example": [
+        { "region": "North America", "prevalence_per_100k": 150, "notes": "Higher in African American women" },
+        { "region": "Europe", "prevalence_per_100k": 120, "notes": "Scandinavia reports lower rates" }
+      ]
+    },
+    {
+  "name": "demographics",
+  "type": "object",
+  "required": true,
+  "description": "Key demographic patterns associated with disease prevalence",
+  "properties": {
+    "age_group": {
+      "type": "string",
+      "description": "Most affected age range",
+      "example": "15–44 years (peak onset)"
+    },
+    "sex_distribution": {
+      "type": "string",
+      "description": "Sex-based prevalence ratio",
+      "example": "9:1 female to male ratio"
+    },
+    "ethnicity_notes": {
+      "type": "string",
+      "description": "Ethnic or racial groups with notably higher or lower prevalence",
+      "example": "3x higher prevalence in African American and Hispanic women vs white women"
+    }
+  }
+},
+    {
+      "name": "mortality_rate",
+      "type": "string",
+      "required": false,
+      "description": "Reported mortality rate or survival statistics",
+      "example": "10-year survival rate approximately 90% in high-income countries"
+    },
+    {
+      "name": "burden_of_disease",
+      "type": "object",
+      "required": false,
+      "description": "Quantitative and narrative disease burden",
+      "properties": {
+        "dalys": {
+          "type": "string",
+          "description": "Disability-adjusted life years if available",
+          "example": "1.5 million DALYs globally per year"
+        },
+        "narrative": {
+          "type": "string",
+          "description": "Brief narrative on overall societal and economic burden",
+          "example": "Lupus imposes significant economic burden through lost productivity and high treatment costs particularly in working-age women"
+        }
+      }
+    }
+  ],
+
+  "freetext_fields": [],
+
+  "charts": [
+    {
+      "id": "prevalence_by_region",
+      "type": "pie",
+      "source_field": "geographic_distribution",
+      "x": "region",
+      "y": "prevalence_per_100k",
+      "title": "Prevalence by Region (per 100k)",
+      "caption": "Regional variation in disease prevalence per 100,000 population"
+    }
+  ],
+
+  "mermaid": null,
+
+  "validation": {
+    "required_fields": ["prevalence", "incidence_rate", "geographic_distribution", "demographics"],
+    "min_array_length": {
+      "geographic_distribution": 3
+    },
+    "on_failure": "placeholder"
+  },
+
+  "prompt_hints": {
+    "tone": "precise and data-driven — cite ranges where exact figures vary",
+    "avoid": [
+      "vague statements like 'affects millions worldwide' without figures",
+      "inventing DALYs or mortality figures — mark as unavailable if unknown",
+      "mixing incidence and prevalence definitions"
+    ],
+    "prefer": [
+      "specific numeric values with population denominators",
+      "noting data source context where relevant (e.g. high-income vs low-income countries)",
+      "flagging where data is limited or contested"
+    ]
+  }
+}

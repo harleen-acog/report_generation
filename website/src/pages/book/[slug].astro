@@ -1,0 +1,154 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getReportsByType, getReport } from "../../lib/reports";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+  const reports = getReportsByType("book_report");
+  return reports.map((r) => ({ params: { slug: r.slug } }));
+}
+
+const { slug } = Astro.params;
+const report = getReport("book_report", slug!);
+
+if (!report) {
+  return Astro.redirect("/");
+}
+
+const { meta, sections, content } = report;
+
+// extract key structured fields from raw content for the hero
+const themesMatch = content.match(/\*\*Themes?\*\*[:\s]*([^\n]+)/i);
+const genresMatch = content.match(/\*\*Genres?\*\*[:\s]*([^\n]+)/i);
+
+const renderedSections = sections.map((s) => ({
+  ...s,
+  html: marked(s.content),
+}));
+---
+
+<Base title={`${meta.name} — Book Report`}>
+  <div class="min-h-screen bg-ink-50 theme-literary">
+
+    <!-- Top Nav -->
+    <header class="border-b border-ink-200 bg-ink-50/90 backdrop-blur-sm sticky top-0 z-50">
+      <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="/" class="text-ink-400 hover:text-ink-700 transition-colors text-sm flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            All Reports
+          </a>
+          <span class="text-ink-200">/</span>
+          <span class="text-xs font-mono text-literary-600 bg-literary-50 px-2 py-1 rounded">
+            Book Report
+          </span>
+        </div>
+        <span class="text-xs text-ink-300 font-mono hidden md:block">
+          {meta.generated_at
+            ? new Date(meta.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+            : ""}
+        </span>
+      </div>
+    </header>
+
+    <div class="max-w-5xl mx-auto px-6 py-12">
+
+      <!-- Book Hero — editorial style -->
+      <div class="mb-14 animate-fade-up">
+        <div class="grid md:grid-cols-[1fr_auto] gap-8 items-start">
+          <div>
+            <p class="text-xs font-mono text-literary-500 tracking-widest uppercase mb-4">
+              Literary Analysis
+            </p>
+            <h1 class="font-display text-5xl md:text-6xl font-bold text-ink-950 leading-tight mb-3">
+              {meta.name}
+            </h1>
+            {meta.author && (
+              <p class="font-display text-xl text-ink-400 italic mb-6">
+                by {meta.author}
+              </p>
+            )}
+
+            <!-- Genre tags -->
+            <div class="flex flex-wrap gap-2 mb-6" id="genre-tags">
+              <!-- populated by JS from content -->
+            </div>
+          </div>
+
+          <!-- Decorative book spine -->
+          <div class="hidden md:flex items-center justify-center">
+            <div class="w-24 h-36 rounded-r-sm shadow-2xl bg-gradient-to-br from-literary-800 to-literary-950 flex items-end p-3 relative overflow-hidden">
+              <div class="absolute inset-0 opacity-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_4px,rgba(255,255,255,0.3)_4px,rgba(255,255,255,0.3)_5px)]"></div>
+              <p class="text-literary-200 text-xs font-display writing-vertical leading-none text-center w-full">
+                {meta.name}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats bar -->
+        <div class="flex flex-wrap gap-6 pt-6 border-t border-ink-200 text-sm text-ink-400">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            {sections.length} sections
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            AI-generated analysis
+          </span>
+        </div>
+      </div>
+
+      <!-- Sections — single column editorial layout -->
+      <div class="space-y-10">
+        {renderedSections.map((section, i) => (
+          <article
+            id={section.id}
+            class="scroll-mt-20 animate-fade-up"
+            style={`animation-delay: ${i * 0.06}s; opacity: 0`}
+          >
+            <div class="flex items-baseline gap-4 mb-4">
+              <span class="font-mono text-xs text-literary-400 w-6 text-right shrink-0">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h2 class="font-display text-2xl font-semibold text-ink-900">
+                {section.title}
+              </h2>
+            </div>
+
+            <div class="ml-10">
+              <div class="prose-report bg-white border border-ink-100 rounded-xl p-6 md:p-8 shadow-sm">
+                <Fragment set:html={section.html} />
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-16 pt-8 border-t border-ink-200 flex items-center justify-between">
+        <a href="/" class="text-sm text-ink-400 hover:text-ink-700 transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          Back to all reports
+        </a>
+        <span class="text-xs text-ink-300 font-mono">AI-generated</span>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+</style>

@@ -6,7 +6,7 @@ import { loadReportConfig } from "../../report-engine/config_loader.js";
 
 // Set this to true to test Phase 2.5 (Smart AI Slides)
 process.env.ENABLE_AI_SLIDES = "true";
-process.env.GOOGLE_GENERATIVE_AI_API_KEY = "AIzaSyDWKjl2J5ZUtb1s37QHSa8M1-98WWUBDBU";
+process.env.GOOGLE_GENERATIVE_AI_API_KEY = "";
 
 async function runTest() {
   const report_type = "disease_report";
